@@ -1,0 +1,25 @@
+{
+  "play": {
+    "pitches_by_request": {"pA": 60, "pB": 60, "pC": 63, "rA": 60, "rB": 60, "rC": 63},
+    "checkpoints": {"pA": [60], "pB": [60], "pC": [60, 63], "rA": [60, 63], "rB": [63], "rC": []},
+    "events": [
+      {"seq": 1, "action": "start", "pitch": 60, "request_id": "pA"},
+      {"seq": 2, "action": "start", "pitch": 63, "request_id": "pC"},
+      {"seq": 3, "action": "stop", "pitch": 60, "request_id": "rB"},
+      {"seq": 4, "action": "stop", "pitch": 63, "request_id": "rC"}
+    ]
+  },
+  "after_reopen": {
+    "status": "closed",
+    "pitches": [],
+    "pitches_by_request": {"pA": 60, "pB": 60, "pC": 63, "rA": 60, "rB": 60, "rC": 63},
+    "events": [
+      {"seq": 1, "action": "start", "pitch": 60, "request_id": "pA"},
+      {"seq": 2, "action": "start", "pitch": 63, "request_id": "pC"},
+      {"seq": 3, "action": "stop", "pitch": 60, "request_id": "rB"},
+      {"seq": 4, "action": "stop", "pitch": 63, "request_id": "rC"}
+    ],
+    "receipt_pitch": 63,
+    "rejection": "session_closed"
+  }
+}

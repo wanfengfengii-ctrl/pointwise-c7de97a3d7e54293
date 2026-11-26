@@ -1,0 +1,20 @@
+{
+  "layout": {
+    "layout_id": "weekend",
+    "keyboards": [
+      {"keyboard_id": "A", "part": "piano", "low": 48, "high": 72, "transposition": 0},
+      {"keyboard_id": "B", "part": "organ", "low": 48, "high": 72, "transposition": 1}
+    ]
+  },
+  "play": [
+    {"operation": "press", "request_id": "pA", "keyboard_id": "A", "key": 60},
+    {"operation": "press", "request_id": "pB", "keyboard_id": "B", "key": 59},
+    {"operation": "transpose", "keyboard_id": "A", "transposition": 2},
+    {"operation": "press", "request_id": "pC", "keyboard_id": "A", "key": 61},
+    {"operation": "release", "request_id": "rA", "keyboard_id": "A", "press_id": "pA"},
+    {"operation": "release", "request_id": "rB", "keyboard_id": "B", "press_id": "pB"},
+    {"operation": "release", "request_id": "rC", "keyboard_id": "A", "press_id": "pC"}
+  ],
+  "lookup_request": "pC",
+  "after_close": {"request_id": "late", "keyboard_id": "A", "key": 60}
+}
