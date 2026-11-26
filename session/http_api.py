@@ -17,6 +17,7 @@ from session.lifecycle import SessionTurns
 from session.opening import open_session
 from session.session_book import create_session_schema
 from session.storage import BusinessError, initialize_store, require_text
+from sound.monitor_feed import create_monitor_feed_schema, issue_cut, read_steps
 from sound.output import create_output_schema
 from sound.tuning import change_transposition, create_tuning_schema
 from sound.voices import create_voice_schema
@@ -100,6 +101,22 @@ class RehearsalHandler(BaseHTTPRequestHandler):
                 return 200, lookup_operation(database, session_id, request_id).to_dict()
             case 'GET', ['sessions', session_id, 'sound']:
                 return 200, listen_session(database, session_id)
+            case 'POST', ['sessions', session_id, 'monitor', 'cuts']:
+                return 200, issue_cut(database, session_id,
+                                      body.get('ticket_id'), body.get('keyboard_id'))
+            case 'GET', ['sessions', session_id, 'monitor', 'steps']:
+                query = parse_qs(url.query, keep_blank_values=True)
+
+                def single_query(name):
+                    values = query.get(name, [])
+                    if len(values) != 1:
+                        raise BusinessError(422, 'invalid_query', f'Supply one {name} query parameter')
+                    return values[0]
+
+                keyboard_id = single_query('keyboard_id')
+                after = single_query('after')
+                through = single_query('through')
+                return 200, read_steps(database, session_id, keyboard_id, after, through)
             case _:
                 raise BusinessError(404, 'route_not_found', 'No route for this method and path')
 
@@ -116,6 +133,7 @@ def build_server(database, port=0, *, transport=direct_delivery):
     initialize_store(database, (
         create_layout_schema, create_session_schema, create_request_schema,
         create_tuning_schema, create_voice_schema, create_output_schema, create_archive_schema,
+        create_monitor_feed_schema,
     ))
     server = ThreadingHTTPServer(('127.0.0.1', port), RehearsalHandler)
     server.delivery = Delivery(database, SessionTurns(), transport)
